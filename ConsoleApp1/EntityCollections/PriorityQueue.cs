@@ -4,9 +4,9 @@ using System.Collections;
 namespace bioT.EntityCollections
 {
     /* 
-     * PriorityQueue via Binary Tree; Max Heap (nodes, not array)
+     * PriorityQueue with Heap (No Array)
      * Deafult compare: Higher value = Higher priority
-     * Ctor: User can use this data stracture with T(T is Generic) where T is IComperable, or any T and send a compare Functions
+     * Ctor: User can use this data stracture with T(Generic) where T is IComperable, or any T and send a compare Function.
      * The compare function Func<T, T, int> gets T1 and T2 and returns:
            negative  if T1 < T2 
            0         if T1 == T2
@@ -15,7 +15,7 @@ namespace bioT.EntityCollections
         Example:
             var pq1 = new PriorityQueue<int>();                                                       // Works!  max heap
             var pq2 = new PriorityQueue<int>( (x,y)=> {return y-x;})                                  // Works!  min Heap
-            var pq3 = new PriorityQueue<SomeClassNotIComperabel>()                                    // Dont Work! Exception("Can't compare types");  
+            var pq3 = new PriorityQueue<SomeClassNotIComperabel>()                                    // Does Not Work! Exception("Can't compare types");  
             var pq3 = new PriorityQueue<SomeClassNotIComperabel>(someCompareFunctionForThisClass)     // Works! Pirority is dictated by the function the user sent    
      */
 
@@ -83,12 +83,10 @@ namespace bioT.EntityCollections
             T res = r_Root.Data;
             Node<T> lastNode = Count == 1 ? r_Root : getLastNode(); // last node added is root or find it with the function
             Count--; 
-
             swapData(lastNode, r_Root); 
             removeNode(lastNode);
-
             bubbleDown();
-
+            
             return res;
         }
 
@@ -99,7 +97,6 @@ namespace bioT.EntityCollections
             Node<T> maxChild = maxPriority(curr.Left, curr.Right);
             while (!isLeaf(curr) && !isPrier(curr.Data, maxChild.Data))
             {
-              
                 swapData(curr, maxChild);
                 curr = maxChild;
                 maxChild = maxPriority(curr.Left, curr.Right);
@@ -125,7 +122,6 @@ namespace bioT.EntityCollections
                 i_Node.Parent.Left = null;
 
             i_Node.Dispose();
-
         }
 
         private void swapData(Node<T> a, Node<T> b)
@@ -156,7 +152,6 @@ namespace bioT.EntityCollections
             if (getNodeForAdding) condition = 1;
             Node<T> curr = r_Root;
             string binary = Convert.ToString(this.Count, 2);
-
             for (int i = 1; i < binary.Length - condition; i++)
             {
                 curr = binary[i] == '0' ? curr.Left : curr.Right;
